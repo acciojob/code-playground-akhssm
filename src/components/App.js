@@ -8,33 +8,24 @@ import {
 } from "react-router-dom";
 import "../styles/App.css";
 
-const PrivateRoute = ({ component: Component, isAuth, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuth ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/login" />
-        )
-      }
-    />
-  );
-};
+/* 🔒 Private Route */
+const PrivateRoute = ({ component: Component, isAuth, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) =>
+      isAuth ? <Component {...props} /> : <Redirect to="/login" />
+    }
+  />
+);
 
-const Playground = () => {
-  return <h2>Welcome to Code Playground</h2>;
-};
+const Login = ({ onLogin }) => (
+  <div>
+    <h2>Login Page</h2>
+    <button onClick={onLogin}>Login</button>
+  </div>
+);
 
-const Login = ({ onLogin }) => {
-  return (
-    <div>
-      <h2>Login Page</h2>
-      <button onClick={onLogin}>Login</button>
-    </div>
-  );
-};
+const Playground = () => <h2>Welcome to Code Playground</h2>;
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -49,23 +40,18 @@ function App() {
         </p>
 
         <nav>
-          <ul>
-            <li>
-              <Link to="/playground">PlayGround</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          </ul>
+          <Link to="/playground">PlayGround</Link> |{" "}
+          <Link to="/login">Login</Link>
         </nav>
 
         <Switch>
-          <Route
-            path="/login"
-            render={() => (
-              <Login onLogin={() => setIsAuthenticated(true)} />
-            )}
-          />
+          <Route exact path="/">
+            <Redirect to="/login" />
+          </Route>
+
+          <Route path="/login">
+            <Login onLogin={() => setIsAuthenticated(true)} />
+          </Route>
 
           <PrivateRoute
             path="/playground"
