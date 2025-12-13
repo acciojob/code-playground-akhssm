@@ -3,29 +3,25 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect,
   Link
 } from "react-router-dom";
 import "../styles/App.css";
 
-/* 🔒 Private Route */
-const PrivateRoute = ({ component: Component, isAuth, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuth ? <Component {...props} /> : <Redirect to="/login" />
-    }
-  />
-);
+const PrivateRoute = ({ isAuth, children }) => {
+  if (!isAuth) {
+    return <h3>Page not Found</h3>;
+  }
+  return children;
+};
 
 const Login = ({ onLogin }) => (
   <div>
-    <h2>Login Page</h2>
+    <h2>Login</h2>
     <button onClick={onLogin}>Login</button>
   </div>
 );
 
-const Playground = () => <h2>Welcome to Code Playground</h2>;
+const Playground = () => <h2>Code Playground</h2>;
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,27 +35,27 @@ function App() {
             : "You are not authenticated, Please login first"}
         </p>
 
-        <nav>
-          <Link to="/playground">PlayGround</Link> |{" "}
-          <Link to="/login">Login</Link>
-        </nav>
+        <ul>
+          <li>
+            <Link to="/playground">PlayGround</Link>
+          </li>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </ul>
 
         <Switch>
-          <Route exact path="/">
-            <Redirect to="/login" />
-          </Route>
-
           <Route path="/login">
             <Login onLogin={() => setIsAuthenticated(true)} />
           </Route>
 
-          <PrivateRoute
-            path="/playground"
-            component={Playground}
-            isAuth={isAuthenticated}
-          />
+          <Route path="/playground">
+            <PrivateRoute isAuth={isAuthenticated}>
+              <Playground />
+            </PrivateRoute>
+          </Route>
 
-          <Route path="*">
+          <Route path="/">
             <h3>Page not Found</h3>
           </Route>
         </Switch>
