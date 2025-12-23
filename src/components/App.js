@@ -3,37 +3,26 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Link,
-  useHistory
+  Link
 } from "react-router-dom";
 import "../styles/App.css";
 
-const PrivateRoute = ({ isAuth, children }) => {
-  return isAuth ? children : <h3>Page not Found</h3>;
-};
-
 const Login = ({ onLogin }) => {
-  const history = useHistory();
-
-  const handleLogin = () => {
-    onLogin();
-    history.push("/playground");
-  };
-
   return (
     <div>
       <h2>Log In</h2>
-      <button onClick={handleLogin}>Log In</button>
+      <button onClick={onLogin}>Log In</button>
     </div>
   );
 };
 
-const Playground = () => (
-  <>
-    <p>Hi Welcome to Code PlayGround</p>
+const Playground = ({ isAuthenticated }) => {
+  if (!isAuthenticated) return null;
+
+  return (
     <button>Hi Welcome to Code PlayGround</button>
-  </>
-);
+  );
+};
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -48,10 +37,10 @@ function App() {
 
       <ul>
         <li>
-          <Link to="/playground">PlayGround</Link>
+          <Link to="/login">Login</Link>
         </li>
         <li>
-          <Link to="/login">Login</Link>
+          <Link to="/playground">PlayGround</Link>
         </li>
       </ul>
 
@@ -61,19 +50,19 @@ function App() {
         </button>
       )}
 
+      <Playground isAuthenticated={isAuthenticated} />
+
       <Switch>
         <Route path="/login">
           <Login onLogin={() => setIsAuthenticated(true)} />
         </Route>
 
         <Route path="/playground">
-          <PrivateRoute isAuth={isAuthenticated}>
-            <Playground />
-          </PrivateRoute>
+          <div />
         </Route>
 
         <Route path="/">
-          <h3>Page not Found</h3>
+          <div />
         </Route>
       </Switch>
     </div>
