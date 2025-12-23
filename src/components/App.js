@@ -32,61 +32,62 @@ const Login = ({ onLogin }) => {
 };
 
 const Playground = () => (
-  <button>Hi Welcome to Code PlayGround</button>
+  <h2>Hi Welcome to Code PlayGround</h2>
 );
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const history = useHistory();
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    history.push("/login");
+  };
 
   return (
-    <Router>
-      <div className="main-container">
-        <p>
-          {isAuthenticated
-            ? "Logged in, Now you can enter Playground"
-            : "You are not authenticated, Please login first"}
-        </p>
+    <div className="main-container">
+      <p>
+        {isAuthenticated
+          ? "Logged in, Now you can enter Playground"
+          : "You are not authenticated, Please login first"}
+      </p>
 
-        <ul>
-          <li>
-            <Link to="/playground">PlayGround</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
+      <ul>
+        <li>
+          <Link to="/playground">PlayGround</Link>
+        </li>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+      </ul>
 
-          {isAuthenticated && (
-            <li>
-              <button
-                onClick={() => {
-                  setIsAuthenticated(false);
-                  window.location.pathname = "/login";
-                }}
-              >
-                Log Out
-              </button>
-            </li>
-          )}
-        </ul>
+      {isAuthenticated && (
+        <button onClick={handleLogout}>Log Out</button>
+      )}
 
-        <Switch>
-          <Route path="/login">
-            <Login onLogin={() => setIsAuthenticated(true)} />
-          </Route>
+      <Switch>
+        <Route path="/login">
+          <Login onLogin={() => setIsAuthenticated(true)} />
+        </Route>
 
-          <Route path="/playground">
-            <PrivateRoute isAuth={isAuthenticated}>
-              <Playground />
-            </PrivateRoute>
-          </Route>
+        <Route path="/playground">
+          <PrivateRoute isAuth={isAuthenticated}>
+            <Playground />
+          </PrivateRoute>
+        </Route>
 
-          <Route path="/">
-            <h3>Page not Found</h3>
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+        <Route path="/">
+          <h3>Page not Found</h3>
+        </Route>
+      </Switch>
+    </div>
   );
 }
 
-export default App;
+export default function AppWrapper() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+}
