@@ -54,11 +54,17 @@ function App() {
           <li>
             <Link to="/login">Login</Link>
           </li>
+
           {isAuthenticated && (
             <li>
-              <Link to="/" onClick={() => setIsAuthenticated(false)}>
+              <button
+                onClick={() => {
+                  setIsAuthenticated(false);
+                  window.location.pathname = "/login";
+                }}
+              >
                 Log Out
-              </Link>
+              </button>
             </li>
           )}
         </ul>
