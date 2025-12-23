@@ -32,17 +32,11 @@ const Login = ({ onLogin }) => {
 };
 
 const Playground = () => (
-  <h2>Hi Welcome to Code PlayGround</h2>
+  <button>Hi Welcome to Code PlayGround</button>
 );
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const history = useHistory();
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    history.push("/login");
-  };
 
   return (
     <div className="main-container">
@@ -61,9 +55,7 @@ function App() {
         </li>
       </ul>
 
-      {isAuthenticated && (
-        <button onClick={handleLogout}>Log Out</button>
-      )}
+      {isAuthenticated && <p>Log Out</p>}
 
       <Switch>
         <Route path="/login">
