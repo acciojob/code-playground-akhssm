@@ -31,7 +31,7 @@ const Login = ({ onLogin }) => {
   );
 };
 
-const Playground = () => <h2>Code Playground</h2>;
+const Playground = () => <h2>Hi Welcome to Code PlayGround</h2>;
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -53,6 +53,12 @@ function App() {
             <Link to="/login">Login</Link>
           </li>
         </ul>
+
+        {isAuthenticated && (
+          <button onClick={() => setIsAuthenticated(false)}>
+            Log Out
+          </button>
+        )}
 
         <Switch>
           <Route path="/login">
