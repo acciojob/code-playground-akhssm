@@ -9,10 +9,7 @@ import {
 import "../styles/App.css";
 
 const PrivateRoute = ({ isAuth, children }) => {
-  if (!isAuth) {
-    return <h3>Page not Found</h3>;
-  }
-  return children;
+  return isAuth ? children : <h3>Page not Found</h3>;
 };
 
 const Login = ({ onLogin }) => {
@@ -32,11 +29,17 @@ const Login = ({ onLogin }) => {
 };
 
 const Playground = () => (
-  <button>Hi Welcome to Code PlayGround</button>
+  <p>Hi Welcome to Code PlayGround</p>
 );
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const history = useHistory();
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    history.push("/login");
+  };
 
   return (
     <div className="main-container">
@@ -55,7 +58,9 @@ function App() {
         </li>
       </ul>
 
-      {isAuthenticated && <p>Log Out</p>}
+      {isAuthenticated && (
+        <button onClick={handleLogout}>Log Out</button>
+      )}
 
       <Switch>
         <Route path="/login">
