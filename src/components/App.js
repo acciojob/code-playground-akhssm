@@ -31,7 +31,9 @@ const Login = ({ onLogin }) => {
   );
 };
 
-const Playground = () => <h2>Hi Welcome to Code PlayGround</h2>;
+const Playground = () => (
+  <button>Hi Welcome to Code PlayGround</button>
+);
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -52,13 +54,14 @@ function App() {
           <li>
             <Link to="/login">Login</Link>
           </li>
+          {isAuthenticated && (
+            <li>
+              <Link to="/" onClick={() => setIsAuthenticated(false)}>
+                Log Out
+              </Link>
+            </li>
+          )}
         </ul>
-
-        {isAuthenticated && (
-          <button onClick={() => setIsAuthenticated(false)}>
-            Log Out
-          </button>
-        )}
 
         <Switch>
           <Route path="/login">
