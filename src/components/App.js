@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Link
+  Link,
+  useHistory
 } from "react-router-dom";
 import "../styles/App.css";
 
@@ -14,12 +15,21 @@ const PrivateRoute = ({ isAuth, children }) => {
   return children;
 };
 
-const Login = ({ onLogin }) => (
-  <div>
-    <h2>Login</h2>
-    <button onClick={onLogin}>Login</button>
-  </div>
-);
+const Login = ({ onLogin }) => {
+  const history = useHistory();
+
+  const handleLogin = () => {
+    onLogin();
+    history.push("/playground");
+  };
+
+  return (
+    <div>
+      <h2>Log In</h2>
+      <button onClick={handleLogin}>Log In</button>
+    </div>
+  );
+};
 
 const Playground = () => <h2>Code Playground</h2>;
 
@@ -31,7 +41,7 @@ function App() {
       <div className="main-container">
         <p>
           {isAuthenticated
-            ? "You are authenticated"
+            ? "Logged in, Now you can enter Playground"
             : "You are not authenticated, Please login first"}
         </p>
 
