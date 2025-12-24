@@ -1,78 +1,46 @@
 import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Link
-} from "react-router-dom";
-import "../styles/App.css";
+import "./../styles/App.css";
+import { Link, Switch, Route } from "react-router-dom";
 
-const Login = ({ onLogin }) => {
-  return (
-    <div>
-      <h2>Log In</h2>
-      <button onClick={onLogin}>Log In</button>
-    </div>
-  );
-};
+import PrivateRoute from "./PrivateRoute";
+import Login from "./Login";
+import Playground from "./Playground";
 
-const Playground = ({ isAuthenticated }) => {
-  if (!isAuthenticated) return null;
-
-  return (
-    <button>Hi Welcome to Code PlayGround</button>
-  );
-};
-
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
 
   return (
     <div className="main-container">
       <p>
-        {isAuthenticated
-          ? "Logged in, Now you can enter Playground"
-          : "You are not authenticated, Please login first"}
+        {!loggedIn
+          ? "You are not authenticated, Please login first"
+          : "Logged in, Now you can enter Playground"}
       </p>
 
       <ul>
         <li>
-          <Link to="/login">Log In</Link>
-        </li>
-        <li>
           <Link to="/playground">PlayGround</Link>
         </li>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
       </ul>
-
-      {isAuthenticated && (
-        <button onClick={() => setIsAuthenticated(false)}>
-          Log Out
-        </button>
-      )}
-
-      <Playground isAuthenticated={isAuthenticated} />
-
       <Switch>
-        <Route path="/login">
-          <Login onLogin={() => setIsAuthenticated(true)} />
-        </Route>
-
-        <Route path="/playground">
-          <div />
-        </Route>
-
-        <Route path="/">
-          <div />
+        <Route
+          path="/login"
+          render={() => <Login setLoggedIn={setLoggedIn} loggedIn={loggedIn} />}
+        />
+        <PrivateRoute
+          path="/playground"
+          component={Playground}
+          isAuth={loggedIn}
+        />
+        <Route>
+          <p>Page not found</p>
         </Route>
       </Switch>
     </div>
   );
-}
+};
 
-export default function AppWrapper() {
-  return (
-    <Router>
-      <App />
-    </Router>
-  );
-}
+export default App;
